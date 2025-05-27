@@ -1,0 +1,32 @@
+name: Fetch MEXC Popular Symbols Hourly
+
+on:
+  schedule:
+    - cron: '5 * * * *'  # 毎時5分（UTC）
+  workflow_dispatch:      # 手動でも実行できるようにする
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+    steps:
+      - name: リポジトリをチェックアウト
+        uses: actions/checkout@v3
+
+      - name: Pythonをセットアップ
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: 依存パッケージをインストール
+        run: pip install -r requirements.txt
+
+      - name: スクリプトを実行
+        run: python fetch_rankings.py
+
+      - name: 結果をコミット＆プッシュ
+        run: |
+          git config --global user.name 'github-actions'
+          git config --global user.email 'github-actions@github.com'
+          git add rankings.csv
+          git commit -m "Update rankings $(date -u +'%Y-%m-%d %H:%M:%S')" || echo "No changes"
+          git push

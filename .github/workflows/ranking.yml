@@ -2,8 +2,8 @@ name: Fetch MEXC Popular Symbols Hourly
 
 on:
   schedule:
-    - cron: '6 * * * *'  # 毎時5分（UTC）
-  workflow_dispatch:      # 手動でも実行できるようにする
+    - cron: '7 * * * *'         # UTCの毎時7分 → JSTで毎時16分に実行
+  workflow_dispatch:            # 手動実行も許可
 
 jobs:
   run-script:
@@ -11,6 +11,8 @@ jobs:
     steps:
       - name: リポジトリをチェックアウト
         uses: actions/checkout@v3
+        with:
+          persist-credentials: false  # 手動でTOKENを使うためfalseに
 
       - name: Pythonをセットアップ
         uses: actions/setup-python@v4
@@ -24,6 +26,13 @@ jobs:
         run: python fetch_rankings.py
 
       - name: 結果をコミット＆プッシュ
+        env:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo "Skipping git push for now"
+          git config --global user.name 'github-actions'
+          git config --global user.email 'github-actions@github.com'
+          git add rankings.csv
+          git commit -m "Update rankings $(date -u +'%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
+          git push https://x-access-token:${TOKEN}@github.com/${{ github.repository }}.git HEAD:main
+
 

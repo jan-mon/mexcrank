@@ -25,8 +25,5 @@ jobs:
 
       - name: 結果をコミット＆プッシュ
         run: |
-          git config --global user.name 'github-actions'
-          git config --global user.email 'github-actions@github.com'
-          git add rankings.csv
-          git commit -m "Update rankings $(date -u +'%Y-%m-%d %H:%M:%S')" || echo "No changes"
-          git push
+          echo "Skipping git push for now"
+

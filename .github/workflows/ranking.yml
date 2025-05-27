@@ -2,7 +2,7 @@ name: Fetch MEXC Popular Symbols Hourly
 
 on:
   schedule:
-    - cron: '5 * * * *'  # 毎時5分（UTC）
+    - cron: '6 * * * *'  # 毎時5分（UTC）
   workflow_dispatch:      # 手動でも実行できるようにする
 
 jobs:

@@ -20,7 +20,7 @@ timestamp = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
 # CSVに追記
 with open('rankings.csv', mode='a', newline='') as file:
     writer = csv.writer(file)
-    for rank, symbol in enumerate(symbols, start=1):
+    for rank, symbol in enumerate(symbols[:50], start=1):
         writer.writerow([timestamp, rank, symbol])
 
 print(f"{timestamp}: {len(symbols)} symbols saved.")
